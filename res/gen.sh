@@ -1,11 +1,15 @@
 #!/bin/bash
 
-WORKSPACE=..
-LUBAN_DLL=$WORKSPACE/Tools/Luban/Luban.dll
-CONF_ROOT=.
+WORKSPACE=.
+LUBAN_DLL=$WORKSPACE/Luban4.1.0/Luban.dll
 
 dotnet $LUBAN_DLL \
     -t all \
     -d json \
-    --conf $CONF_ROOT/luban.conf \
-    -x outputDataDir=output
+    -d bin \
+    -c go-bin \
+    --conf $WORKSPACE/luban.conf \
+    -x json.outputDataDir=data/json \
+    -x bin.outputDataDir=data/bin \
+    -x outputCodeDir=../pkg/res \
+    -x lubanGoModule=KryptonGo/pkg/luban
