@@ -2,6 +2,7 @@ package core
 
 import (
 	"os"
+	"time"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -15,7 +16,20 @@ func (app *App) InitLog() (err error) {
 	}
 
 	fileSyncer := zapcore.AddSync(app.logFile)
-	encoder := zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
+
+	customTimeEncoder := func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
+		enc.AppendString(t.Format("2006-01-02 15:04:05.000"))
+	}
+
+	customCallerEncoder := func(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder) {
+		enc.AppendString(caller.TrimmedPath() + " " + caller.Function)
+	}
+
+	EncoderCfg := zap.NewProductionEncoderConfig()
+	EncoderCfg.EncodeTime = customTimeEncoder
+	EncoderCfg.EncodeLevel = zapcore.CapitalLevelEncoder
+	EncoderCfg.EncodeCaller = customCallerEncoder
+	encoder := zapcore.NewJSONEncoder(EncoderCfg)
 
 	core := zapcore.NewCore(encoder, fileSyncer, zap.DebugLevel)
 
@@ -31,4 +45,9 @@ func SLOG() *zap.SugaredLogger {
 
 func LOG() *zap.Logger {
 	return app.logger
+}
+
+func (app *App) FreeLog() {
+	app.logger.Sync()
+	app.logFile.Close()
 }

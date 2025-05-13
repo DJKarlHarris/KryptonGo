@@ -16,11 +16,6 @@ type App struct {
 	sugarLogger *zap.SugaredLogger
 }
 
-func Exit() {
-	app.logger.Sync()
-	app.logFile.Close()
-}
-
 func Init() (err error) {
 	// init log
 	err = app.InitLog()
@@ -29,4 +24,8 @@ func Init() (err error) {
 	app.InitRes()
 
 	return err
+}
+
+func Exit() {
+	app.FreeLog()
 }

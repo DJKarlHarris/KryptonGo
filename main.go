@@ -30,5 +30,7 @@ func main() {
 
 	core.SLOG().Infof("test url:%s time:%d backoff:%s", url, 3, time.Second)
 
+	core.SLOG().Infof("test url:%s time:%d backoff:%s", url, 3, time.Second)
+
 	core.Exit()
 }
