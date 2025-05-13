@@ -1,6 +1,7 @@
 package core
 
 import (
+	"strings"
 	"time"
 
 	"go.uber.org/zap"
@@ -24,7 +25,14 @@ func (app *App) InitLog() (err error) {
 	}
 
 	customCallerEncoder := func(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder) {
-		enc.AppendString(caller.TrimmedPath() + " " + caller.Function)
+
+		funcName := ""
+		idx := strings.LastIndexByte(caller.Function, '.')
+		if idx != -1 {
+			funcName = caller.Function[idx+1:]
+		}
+
+		enc.AppendString(caller.TrimmedPath() + " " + funcName)
 	}
 
 	EncoderCfg := zap.NewProductionEncoderConfig()

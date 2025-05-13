@@ -1,0 +1,5 @@
+ServerConfig:
+  Test: 1000
+  Table:
+    - "tom"
+    - "karl"
