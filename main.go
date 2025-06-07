@@ -3,7 +3,34 @@ package main
 import (
 	"KryptonGo/pkg/core"
 	"fmt"
+	"reflect"
 )
+
+func test(args ...any) {
+	for _, v := range args {
+		if v == nil {
+			break
+		}
+
+		t := reflect.TypeOf(v)
+		core.SLOG().Infof("%s %s value:%v", t.Name(), t.Kind(), v)
+	}
+}
+
+func test2(args []any) []any {
+	for _, v := range args {
+		if v == nil {
+			break
+		}
+
+		t := reflect.TypeOf(v)
+		core.SLOG().Infof("%s %s value:%v", t.Name(), t.Kind(), v)
+	}
+
+	args = append(args, 10)
+
+	return args
+}
 
 func main() {
 	var err error
@@ -37,6 +64,25 @@ func main() {
 	for _, value := range core.GetConfig().ServerConfig.Table {
 		core.SLOG().Infof("%s", value)
 	}
+
+	//test db
+	core.QueryMore()
+
+	argsAny := make([]any, 0, 5)
+	argsAny = append(argsAny, 1)
+	argsAny = append(argsAny, "2")
+	argsAny = append(argsAny, 1.2)
+
+	//test(argsAny...)
+	argsAny = test2(argsAny)
+
+	for _, v := range argsAny {
+		core.SLOG().Infof("%v", v)
+	}
+
+	var y interface{} = nil
+	z := y.(int)
+	fmt.Printf("%+v", z)
 
 	core.Exit()
 }

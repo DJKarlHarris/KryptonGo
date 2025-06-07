@@ -2,12 +2,15 @@ package core
 
 import (
 	"KryptonGo/pkg/res"
+	"database/sql"
 	"os"
 
 	"go.uber.org/zap"
 )
 
-var app App
+var (
+	app App
+)
 
 type App struct {
 	logFile     *os.File
@@ -15,12 +18,13 @@ type App struct {
 	logger      *zap.Logger
 	sugarLogger *zap.SugaredLogger
 	config      Config
+	db          *sql.DB
 }
 
 func Init() (err error) {
 	// init log
 	if err = app.InitLog(); err != nil {
-		SLOG().Infof("init log fail err", err.Error())
+		SLOG().Errorf("init log fail err", err.Error())
 		return err
 	}
 
@@ -29,7 +33,10 @@ func Init() (err error) {
 
 	// load config
 	if err = app.LoadConfig("./cfg/config.yaml"); err != nil {
-		SLOG().Infof("load config fail %s", err.Error())
+		return err
+	}
+
+	if err = app.InitDB(); err != nil {
 		return err
 	}
 
@@ -40,4 +47,9 @@ func Init() (err error) {
 
 func Exit() {
 	app.FreeLog()
+	app.db.Close()
+}
+
+func getApp() App {
+	return app
 }
