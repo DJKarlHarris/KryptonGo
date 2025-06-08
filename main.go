@@ -80,9 +80,9 @@ func main() {
 		core.SLOG().Infof("%v", v)
 	}
 
-	var y interface{} = nil
-	z := y.(int)
-	fmt.Printf("%+v", z)
+	//var y interface{} = nil
+	//z := y.(int)
+	//fmt.Printf("%+v", z)
 
 	core.Exit()
 }

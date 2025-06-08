@@ -8,7 +8,7 @@ import (
 
 func (app *App) InitDB() (err error) {
 
-	dsn := "root:123456@tcp(192.168.1.3:3306)/test"
+	dsn := "root:123456@tcp(192.168.31.70:3306)/test_db"
 
 	app.db, err = sql.Open("mysql", dsn)
 	if err != nil {
@@ -31,7 +31,7 @@ type testtb struct {
 }
 
 func QueryMore() (err error) {
-	rows, err := getApp().db.Query("SELECT * FROM testtb")
+	rows, err := getApp().db.Query("SELECT * FROM test_tb")
 	if err != nil {
 		SLOG().Info("query fail:%s", err.Error())
 		return err
