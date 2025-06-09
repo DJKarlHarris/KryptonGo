@@ -1,0 +1,1 @@
+INSERT INTO test_tb (ext) VALUES ('test1');

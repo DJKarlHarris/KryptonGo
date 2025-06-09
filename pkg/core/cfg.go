@@ -6,13 +6,19 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// tips首字母大写保证字段可见
 type Config struct {
 	ServerConfig ServerConfig `yaml:"ServerConfig"`
 }
 
+type Db struct {
+	Addr   string `yaml:"Addr"`
+	Passwd string `yaml:"Passwd"`
+	Port   string `yaml:"Port"`
+}
+
 type ServerConfig struct {
-	Test  int      `yaml:"Test"`
-	Table []string `yaml:"Table"`
+	Db Db `yaml:"Db"`
 }
 
 func (app *App) LoadConfig(path string) (err error) {

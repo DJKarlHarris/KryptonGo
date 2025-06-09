@@ -36,6 +36,7 @@ func Init() (err error) {
 		return err
 	}
 
+	// init db
 	if err = app.InitDB(); err != nil {
 		return err
 	}
@@ -47,7 +48,7 @@ func Init() (err error) {
 
 func Exit() {
 	app.FreeLog()
-	app.db.Close()
+	app.FreeDb()
 }
 
 func getApp() App {

@@ -1,5 +1,5 @@
 ServerConfig:
-  Test: 1000
-  Table:
-    - "tom"
-    - "karl"
+  Db:
+    Addr: "172.29.224.1"
+    Passwd: "123456"
+    Port: "3306"

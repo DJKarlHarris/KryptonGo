@@ -58,6 +58,11 @@ func LOG() *zap.Logger {
 }
 
 func (app *App) FreeLog() {
-	app.logger.Sync()
-	app.logFile.Close()
+	if app.logger != nil {
+		app.logger.Sync()
+	}
+
+	if app.logFile != nil {
+		app.logFile.Close()
+	}
 }

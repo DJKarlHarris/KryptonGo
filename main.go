@@ -17,21 +17,6 @@ func test(args ...any) {
 	}
 }
 
-func test2(args []any) []any {
-	for _, v := range args {
-		if v == nil {
-			break
-		}
-
-		t := reflect.TypeOf(v)
-		core.SLOG().Infof("%s %s value:%v", t.Name(), t.Kind(), v)
-	}
-
-	args = append(args, 10)
-
-	return args
-}
-
 func main() {
 	var err error
 
@@ -40,6 +25,7 @@ func main() {
 		println(err.Error())
 		return
 	}
+	defer core.Exit()
 
 	//test table
 	for idx, reward := range core.GetResTable().TbReward.GetDataList() {
@@ -58,31 +44,30 @@ func main() {
 	//	core.SLOG().Infof("test url:%s time:%d backoff:%s", url, 3, time.Second)
 	//}
 
-	//test cfg
-	core.SLOG().Infof("test:%d", core.GetConfig().ServerConfig.Test)
-
-	for _, value := range core.GetConfig().ServerConfig.Table {
-		core.SLOG().Infof("%s", value)
+	//test db
+	results, err := core.QueryMore("SELECT * FROM test_tb")
+	if err != nil {
+		core.SLOG().Errorf("query fail:%s", err)
+		return
 	}
 
-	//test db
-	core.QueryMore()
+	for _, result := range results {
 
-	argsAny := make([]any, 0, 5)
-	argsAny = append(argsAny, 1)
-	argsAny = append(argsAny, "2")
-	argsAny = append(argsAny, 1.2)
+		id, ok := result["id"]
+		if !ok {
+			core.SLOG().Info("id is not found")
+		}
 
-	//test(argsAny...)
-	argsAny = test2(argsAny)
+		ext, ok := result["ext"]
+		if !ok {
+			core.SLOG().Info("ext is not found")
+		}
 
-	for _, v := range argsAny {
-		core.SLOG().Infof("%v", v)
+		core.SLOG().Infof("id:%s ext:%s", id, ext)
 	}
 
 	//var y interface{} = nil
 	//z := y.(int)
 	//fmt.Printf("%+v", z)
 
-	core.Exit()
 }
